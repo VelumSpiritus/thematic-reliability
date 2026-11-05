@@ -110,7 +110,7 @@ Per-window kappa and descriptive per-code values use that window's intersection 
 
 **Compatibility:** `window.per_code` previously reported baseline retention and assigned 1.0 to codes absent from the baseline. It now reports symmetric positive-specific agreement, with `None` when neither coding uses the category. The previous retention measure is available as `window.per_code_metrics[code].recall`. The second value returned by `drifting_codes()` is now explicitly the worst directional slope.
 
-**Category coverage:** the supplied `categories` sequence is retained in every window, including unused categories. It can carry Reledger's full eight-component constant through these diagnostics; it can also carry a research codebook's categories. This package measures supplied unit labels. Grammatical feature extraction remains with the bridge that produces them. Supply the complete category set to keep unused components inspectable; inferred categories include all observed labels.
+**Category coverage:** the supplied `categories` sequence is retained in every window, including unused categories. It can carry any fixed category set (e.g. eight structural features from a content-analysis bridge) through these diagnostics; it can also carry a research codebook's categories. This package measures supplied unit labels. Feature extraction remains with the bridge that produces them. Supply the complete category set to keep unused categories inspectable; inferred categories include all observed labels.
 
 ### `Codebook` / `Code`
 
@@ -148,7 +148,7 @@ The approach comes from applied anthropology methods — specifically, maintaini
 python -m unittest discover -s tests -v
 ```
 
-The stdlib-only suite covers expansion and omission, stable coding, absent/new categories, balanced swaps, changing/disjoint calibration subsets, skipped rounds, all eight component names through network impact, and unchanged overall reliability coefficients.
+The stdlib-only suite covers expansion and omission, stable coding, absent/new categories, balanced swaps, changing/disjoint calibration subsets, skipped rounds, all supplied category names through network impact, and unchanged overall reliability coefficients.
 
 ## License
 

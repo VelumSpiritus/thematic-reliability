@@ -53,17 +53,17 @@ class DriftRegressionTests(unittest.TestCase):
         with self.assertRaises(ValueError):measure_drift(self.base,[self.base],['A'])
         with self.assertRaises(ValueError):measure_drift(self.base,[self.base],['A','A','B'])
         with self.assertRaises(ValueError):_per_code_agreement(['A'],[],['A'])
-    def test_all_eight_components_flow_through_codebook_metrics_and_network(self):
-        axes=['WHAT','HOW','WHO','HOWMUCH','WHEREWHEN','WHY','WHETHER','WHICH']
-        cb=Codebook('Components')
-        for axis in axes:cb.add(Code(axis,axis+' component'))
+    def test_all_eight_categories_flow_through_codebook_metrics_and_network(self):
+        axes=['C0','C1','C2','C3','C4','C5','C6','C7']
+        cb=Codebook('Categories')
+        for axis in axes:cb.add(Code(axis,axis+' category'))
         self.assertEqual(set(Codebook.from_dict(cb.to_dict()).categories()),set(axes))
-        baseline=dict(enumerate(axes));current={**baseline,7:'WHAT'};report=measure_drift(baseline,[baseline,current],categories=axes)
-        self.assertEqual(set(report.windows[1].per_code_metrics),set(axes));self.assertEqual(set(dict(report.drifting_codes())),{'WHAT','WHICH'})
-        network=ThematicNetwork();network.add_basic(BasicTheme('Referents',['WHAT']));network.add_basic(BasicTheme('Selection',['WHICH']))
-        network.add_organizing(OrganizingTheme('Components',['Referents','Selection']));network.add_global(GlobalTheme('Whole',['Components']))
+        baseline=dict(enumerate(axes));current={**baseline,7:'C1'};report=measure_drift(baseline,[baseline,current],categories=axes)
+        self.assertEqual(set(report.windows[1].per_code_metrics),set(axes));self.assertEqual(set(dict(report.drifting_codes())),{'C1','C7'})
+        network=ThematicNetwork();network.add_basic(BasicTheme('Referents',['C1']));network.add_basic(BasicTheme('Selection',['C7']))
+        network.add_organizing(OrganizingTheme('Categories',['Referents','Selection']));network.add_global(GlobalTheme('Whole',['Categories']))
         impact=drift_impact(network,report)
-        self.assertEqual(next(row for row in impact if row['name']=='Whole')['drifting_codes'],['WHAT','WHICH'])
+        self.assertEqual(next(row for row in impact if row['name']=='Whole')['drifting_codes'],['C1','C7'])
     def test_original_overall_coefficients_are_preserved(self):
         self.assertEqual(cohen_kappa(['A','A','B','B'],['A','A','A','A']),(0.,.5,.5))
         self.assertAlmostEqual(krippendorff_alpha([['A','A'],['A','B'],['B','B']])[0],4/9)
